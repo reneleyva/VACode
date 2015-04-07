@@ -119,15 +119,9 @@ void copia(point* arr[], int size, point* cpy[]) {
 
 int main()
 {	
-	point* pares[100];
-	int size = 100;
-	srand(time(NULL));
-	int i;
-	for (i = 0; i < size; i++) {
-		int x = rand();
-		int y = rand();
-		pares[i] = newpoint(x, y);
-	}
+	point* pares[100] = {newpoint(0, 0), newpoint(1, 5), newpoint(0, 10), 
+		newpoint(-20, 30), newpoint(-10097, 656), newpoint(123, 876), newpoint(1, 1),
+		newpoint(0, 89, newpoint(127, 987), newpoint(5, 5))};
 	point* otro_y[size];
 	copia(pares,size,otro_y);
 	qsort(pares,size,sizeof(point),(__compar_fn_t) compareX);
