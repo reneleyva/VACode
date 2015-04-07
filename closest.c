@@ -26,7 +26,7 @@ point* newpoint(long double x, long double y)
 	return p;
 }
 
-pairs* newpairs(point p1, point p2, int dist)
+pairs* newpairs(point* p1, point* p2, int dist)
 {
 	pairs* close = (pairs*)malloc(sizeof(pairs));
 	close->p1 = p1;
@@ -56,19 +56,19 @@ long double distance(point* p1, point* p2)
 {
 	return sqrt(square(p1->x - p2->x) + square(p1->y - p2->y));
 }
-void printpoint(point p1)
+void printpoint(point* p1)
 {
-	printf("( %llf, %llf) ",p1.x,p1.y);
+	printf("( %Lf, %Lf) ",p1->x,p1->y);
 }
 void printpairs(pairs* par)
 {
 	printpoint(par->p1);
 	printf("&&");
 	printpoint(par->p2);
-	printf("\nSu distancia es %d",par->dist);
+	printf("\nSu distancia es %Lf\n",par->dist);
 }
 
-pairs* bforce(point P[], int size)
+pairs* bforce(point* P[], int size)
 {
 	if(!P)
 		return NULL;
@@ -80,10 +80,10 @@ pairs* bforce(point P[], int size)
 	int j;
 	for(i=0; i < size; i++)
 	{
-		for(j= 0; j < size; j++)
+		for(j= i+1; j < size; j++)
 		{
 			long double dist = distance(P[i],P[j]);
-			if(distance(dist < delta)
+			if(dist < delta)
 			{
 				min1 =  *(P+i);
 				min2 = *(P+j);
@@ -91,7 +91,7 @@ pairs* bforce(point P[], int size)
 			}
 		}
 	}
-	pairs* closest = newpairs(min1,min2,delta);
+	closest = newpairs(min1,min2,delta);
 	return closest;
 }
 
@@ -102,26 +102,25 @@ pairs* closest(point* P[],int size)
 		return bforce(P, size);
 
 	int lvertical = (int) size/2;
-	pairs* CL = closest(P,Y,lvertical);
-	pairs* CR = closest(P+lvertical,Y+lvertical,size -lvertical);
+	pairs* CL = closest(P,lvertical);
+	pairs* CR = closest(P+lvertical,size -lvertical);
 	if(CL->dist < CR->dist)
 		return CL;
 	else
 		return CR;
 }
 
-point* copia(point* arr[], int size) {
-	point* nuevo[size];
+void copia(point* arr[], int size, point* cpy[]) {
 	int i;
 	for (i = 0; i < size; i++) {
-		nuevo[i] = arr[i];
+		cpy[i] = arr[i];
 	}
-	return nuevo;
 }
-int main(int argc, char const *argv[])
+
+int main()
 {	
 	point* pares[100];
-	int size = 100 
+	int size = 100;
 	srand(time(NULL));
 	int i;
 	for (i = 0; i < size; i++) {
@@ -129,9 +128,10 @@ int main(int argc, char const *argv[])
 		int y = rand();
 		pares[i] = newpoint(x, y);
 	}
-	otro_y = copia(pares, size)
-	qsort(pares,size,sizeof(point), compareX);
-	qsort(pares,size,sizeof(point), compareY);
+	point* otro_y[size];
+	copia(pares,size,otro_y);
+	qsort(pares,size,sizeof(point),(__compar_fn_t) compareX);
+	qsort(otro_y,size,sizeof(point),(__compar_fn_t) compareY);
 	pairs* min_x = closest(pares, size);
 	pairs* min_y = closest(pares, size);
 	pairs* min_abs =  min_x->dist < min_y->dist ? min_x : min_y;
