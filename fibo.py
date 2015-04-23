@@ -36,6 +36,8 @@ def fiboLog(n):
 	if (n < 0):
 		print("Bale Berga la Bida")
 		return
+	if (n == 0):
+		return 0
 	if (n < 2):
 		return 1 
 	 #i.e. 62 = 2^5 + 2^4 + 2^3 + 2^2 + 2^0 = 32 + 16 + 8 + 4 + 1.
@@ -55,6 +57,6 @@ def fiboLog(n):
 
 if __name__ == '__main__':
 	start = time.time()
-	f = fiboLog(1000000)
+	f = fiboLog(1)
 	print ("Mumero de didgitos de fibonacci de 1000000: %s " % len(str(f)))
 	print ("Tiempo de ejecucion: %s" % (time.time() - start))
